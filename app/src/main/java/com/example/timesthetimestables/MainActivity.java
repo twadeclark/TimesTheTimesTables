@@ -2,7 +2,6 @@ package com.example.timesthetimestables;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button3;
 
     private Random r;
-    private Integer answer, e1, e2;
+    private Integer answer;
     private Integer currentScore = 0, highScore = 0;
     private Integer[] possibleAnswers;
 
@@ -42,40 +41,15 @@ public class MainActivity extends AppCompatActivity {
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
 
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startClick();
-            }
-        });
+        startButton.setOnClickListener(view -> startClick());
 
-        button0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                answerCheck(0);
-            }
-        });
+        button0.setOnClickListener(view -> answerCheck(0));
 
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                answerCheck(1);
-            }
-        });
+        button1.setOnClickListener(view -> answerCheck(1));
 
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                answerCheck(2);
-            }
-        });
+        button2.setOnClickListener(view -> answerCheck(2));
 
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                answerCheck(3);
-            }
-        });
+        button3.setOnClickListener(view -> answerCheck(3));
 
     }
 
@@ -117,15 +91,15 @@ public class MainActivity extends AppCompatActivity {
     private void nextRound() {
         r = new Random();
 
-        e1 = r.nextInt(MaxValue + 1);
-        e2 = r.nextInt(MaxValue + 1);
+        Integer e1 = r.nextInt(MaxValue + 1);
+        Integer e2 = r.nextInt(MaxValue + 1);
 
         answer = e1 * e2;
         equation.setText(e1 + " x " + e2);
 
         possibleAnswers = new Integer[4];
 
-        Integer tmp;
+        int tmp;
         for(int i = 0; i < 4; i++){
             do {
                 tmp = answerGenerator(e1, e2);
