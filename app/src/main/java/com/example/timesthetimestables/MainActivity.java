@@ -2,6 +2,7 @@ package com.example.timesthetimestables;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,20 +36,15 @@ public class MainActivity extends AppCompatActivity {
         startButton = (Button) findViewById(R.id.startButton);
         equation = (TextView) findViewById(R.id.equation);
         youLose = (TextView) findViewById(R.id.youLose);
-
         button0 = (Button) findViewById(R.id.button0);
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
 
         startButton.setOnClickListener(view -> startClick());
-
         button0.setOnClickListener(view -> answerCheck(0));
-
         button1.setOnClickListener(view -> answerCheck(1));
-
         button2.setOnClickListener(view -> answerCheck(2));
-
         button3.setOnClickListener(view -> answerCheck(3));
 
     }
@@ -60,9 +56,8 @@ public class MainActivity extends AppCompatActivity {
             nextRound();
         }
         else {
-            youLose.setVisibility(View.VISIBLE);
             youLose.setText("game over\nfinal score: " + currentScore);
-
+            youLose.setVisibility(View.VISIBLE);
             startButton.setVisibility(View.VISIBLE);
             equation.setVisibility(View.GONE);
             button0.setVisibility(View.GONE);
@@ -71,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
             button3.setVisibility(View.GONE);
 
             currentScore = 0;
+
+            MediaPlayer song = MediaPlayer.create(this, R.raw.sfxdefeat1);
+            song.start();
         }
     }
 
@@ -129,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         Integer aOffset = a + r.nextInt(2) - 1;
         Integer bOffset = b + r.nextInt(2) - 1;
 
-        switch (r.nextInt(10)){
+        switch (r.nextInt(10)) { // close tricky wrong answers not just random numbers, weighted to the default case
             case 0:
                 retVal = a + b;
                 break;
