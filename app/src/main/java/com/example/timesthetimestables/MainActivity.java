@@ -14,9 +14,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private Button startButton;
-    private Button aboutButton;
     private TextView equation;
-    private TextView aboutText;
     private TextView youLose;
     private Button button0;
     private Button button1;
@@ -36,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         startButton = (Button) findViewById(R.id.startButton);
-        aboutButton = (Button) findViewById(R.id.aboutButton);
-        aboutText = (TextView) findViewById(R.id.aboutText);
         equation = (TextView) findViewById(R.id.equation);
         youLose = (TextView) findViewById(R.id.youLose);
 
@@ -50,13 +46,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startClick();
-            }
-        });
-
-        aboutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                aboutText.setVisibility(View.VISIBLE);
             }
         });
 
@@ -101,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
             youLose.setText("game over\nfinal score: " + currentScore);
 
             startButton.setVisibility(View.VISIBLE);
-            aboutButton.setVisibility(View.VISIBLE);
             equation.setVisibility(View.GONE);
             button0.setVisibility(View.GONE);
             button1.setVisibility(View.GONE);
@@ -114,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void startClick() {
         startButton.setVisibility(View.GONE);
-        aboutText.setVisibility(View.GONE);
-        aboutButton.setVisibility(View.GONE);
         youLose.setVisibility(View.GONE);
         equation.setVisibility(View.VISIBLE);
         button0.setVisibility(View.VISIBLE);
@@ -197,11 +183,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return Math.abs(retVal);
-    }
-
-    public void launchSettings(View v){
-        Intent i = new Intent(this, SettingsActivity.class);
-        startActivity(i);
     }
 
 }
