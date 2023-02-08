@@ -2,8 +2,12 @@ package com.example.timesthetimestables;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button1;
     private Button button2;
     private Button button3;
+    private Vibrator vibrator;
 
     private Random r;
     private Integer answer;
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         startButton.setOnClickListener(view -> startClick());
         button0.setOnClickListener(view -> answerCheck(0));
@@ -51,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void answerCheck(Integer i) {
         if(possibleAnswers[i].equals(answer) ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE ));
+            }
             currentScore++;
             setScore();
             nextRound();
@@ -66,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
             button3.setVisibility(View.GONE);
 
             currentScore = 0;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(500);
+            }
 
             MediaPlayer song = MediaPlayer.create(this, R.raw.sfxdefeat1);
             song.start();
