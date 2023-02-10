@@ -1,8 +1,14 @@
 package com.example.timesthetimestables;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button3;
     private Vibrator vibrator;
 
-    private Random r;
+    private Random r = new Random();
     private Integer answer;
     private Integer currentScore = 0, highScore = 0;
     private Integer[] possibleAnswers;
@@ -53,6 +59,61 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(view -> answerCheck(2));
         button3.setOnClickListener(view -> answerCheck(3));
 
+        scrambleButtons();
+    }
+
+    private void scrambleButtons() {
+        startButton.setRotation(r.nextInt(20) - 10);
+        button0.setRotation(r.nextInt(20) - 10);
+        button1.setRotation(r.nextInt(20) - 10);
+        button2.setRotation(r.nextInt(20) - 10);
+        button3.setRotation(r.nextInt(20) - 10);
+
+        GradientDrawable gradientDrawable;
+
+        gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, gradientColorGeneratorLight());
+        gradientDrawable.setCornerRadius(80f);
+        startButton.setBackground(gradientDrawable);
+
+        gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, gradientColorGeneratorLight());
+        gradientDrawable.setCornerRadius(80f);
+        button0.setBackground(gradientDrawable);
+        button1.setBackground(gradientDrawable);
+        button2.setBackground(gradientDrawable);
+        button3.setBackground(gradientDrawable);
+
+    }
+
+    @NonNull
+    private int[] gradientColorGeneratorLight() {
+        int[] startRaw = new int[]{r.nextInt(128) + 128, r.nextInt(128) + 128, r.nextInt(128) + 128};
+        startRaw[r.nextInt(3)] = 255;
+
+        int[] endRaw = new int[]{r.nextInt(128) + 128, r.nextInt(128) + 128, r.nextInt(128) + 128};
+        endRaw[r.nextInt(3)] = 255;
+
+        String startColor = String.format("%02X", startRaw[0]) + String.format("%02X", startRaw[1]) + String.format("%02X", startRaw[2]);
+        String endColor = String.format("%02X", endRaw[0]) + String.format("%02X", endRaw[1]) + String.format("%02X", endRaw[2]);
+
+        int[] ButtonColors = {Color.parseColor("#" + startColor),Color.parseColor("#" + endColor)};
+
+        return ButtonColors;
+    }
+
+    @NonNull
+    private int[] gradientColorGeneratorDark() {
+        int[] startRaw = new int[]{r.nextInt(128), r.nextInt(128), r.nextInt(128)};
+        startRaw[r.nextInt(3)] = 0;
+
+        int[] endRaw = new int[]{r.nextInt(128), r.nextInt(128), r.nextInt(128)};
+        endRaw[r.nextInt(3)] = 0;
+
+        String startColor = String.format("%02X", startRaw[0]) + String.format("%02X", startRaw[1]) + String.format("%02X", startRaw[2]);
+        String endColor = String.format("%02X", endRaw[0]) + String.format("%02X", endRaw[1]) + String.format("%02X", endRaw[2]);
+
+        int[] ButtonColors = {Color.parseColor("#" + startColor),Color.parseColor("#" + endColor)};
+
+        return ButtonColors;
     }
 
     private void answerCheck(Integer i) {
@@ -102,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nextRound() {
-        r = new Random();
-
         Integer e1 = r.nextInt(MaxValue + 1);
         Integer e2 = r.nextInt(MaxValue + 1);
 
@@ -127,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
         button1.setText(possibleAnswers[1].toString());
         button2.setText(possibleAnswers[2].toString());
         button3.setText(possibleAnswers[3].toString());
+
+        scrambleButtons();
     }
 
     private void setScore() {
