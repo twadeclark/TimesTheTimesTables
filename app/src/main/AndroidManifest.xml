@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,9 +14,12 @@
         android:theme="@style/Theme.TimesTheTimesTables"
         tools:targetApi="31">
         <activity
+            android:name=".GameActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
-            android:label="Times the Times Tables by Tom Clark"
-            android:exported="true">
+            android:exported="true"
+            android:label="Times the Times Tables by Tom Clark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
