@@ -23,23 +23,26 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
-    private GameType gameType;
+    private final Integer MaxValue = 10;
 
     private Button startButton;
     private TextView equation;
-    private TextView youLose;
+    private TextView gameOverMsg;
+    private TextView gameOverDetailsMsg;
+
     private Button button0;
     private Button button1;
     private Button button2;
     private Button button3;
     private Vibrator vibrator;
 
+    private GameType gameType;
     private Random r = new Random();
     private Integer answer;
     private Integer currentScore = 0, highScore = 0;
     private Integer[] possibleAnswers;
+    private long timeStart;
 
-    private final Integer MaxValue = 10;
 
     private ArrayList<String> flashCard = new ArrayList<>();
 
@@ -48,9 +51,10 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        startButton = (Button) findViewById(R.id.ultimateChallengeButton);
+        startButton = (Button) findViewById(R.id.menuButton);
         equation = (TextView) findViewById(R.id.equation);
-        youLose = (TextView) findViewById(R.id.youLose);
+        gameOverMsg = (TextView) findViewById(R.id.gameOverMsg);
+        gameOverDetailsMsg = (TextView) findViewById(R.id.gameOverDetailsMsg);
         button0 = (Button) findViewById(R.id.button0);
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
@@ -69,6 +73,8 @@ public class GameActivity extends AppCompatActivity {
         setFlashCards();
 
         scrambleButtons();
+
+        timeStart = System.currentTimeMillis();
         startClick();
     }
 
@@ -80,10 +86,13 @@ public class GameActivity extends AppCompatActivity {
                 flashCard.add("0,0");
                 break;
             case EASYPEASY:
-                for(a = 0; a <= 2; a++) {
-                    for(s = 0; s <= 2; s++ ) {
+                for(a = 0; a <= MaxValue; a++) {
+                    for(s = 0; s <= 1; s++ ) {
                         flashCard.add(a.toString() + "," + s.toString());
+                        flashCard.add(s.toString() + "," + a.toString());
                     }
+                    flashCard.add(a.toString() + ",10");
+                    flashCard.add("10," + a.toString());
                 }
                 break;
             case SQUARESBEARS:
@@ -97,7 +106,7 @@ public class GameActivity extends AppCompatActivity {
                 }
                 break;
             case CENTURY:
-                for(a = 0; a <= MaxValue; a++) { // MaxValue
+                for(a = 0; a <= MaxValue; a++) {
                     for(s = 0; s <= MaxValue; s++ ) {
                         flashCard.add(a.toString() + "," + s.toString());
                     }
@@ -169,30 +178,48 @@ public class GameActivity extends AppCompatActivity {
             setScore();
 
             if (flashCard.isEmpty()) {
+                String g = "You Win\n";
+
                 if(gameType==GameType.EASYPEASY) {
-                    youLose.setText("all done\nyou won\neasy peasy");
+                    g += "Easy Peasy\n";
                 } else if(gameType==GameType.SQUARESBEARS) {
-                    youLose.setText("all done\nyou won\nsquares & bears");
+                    g += "Squares\n& Bears\n";
                 } else if(gameType==GameType.CENTURY) {
-                    youLose.setText("all done\nyou won\ncentury club");
+                    g += "Century Club\n";
                 } else {
-                    youLose.setText("all done\nyou won\nbig winner");
+                    g += "Big Winner\n";
                 }
 
-                youLose.setVisibility(View.VISIBLE);
+                setGameOverDetails();
+
+                gameOverMsg.setText(g);
+                gameOverMsg.setVisibility(View.VISIBLE);
                 startButton.setVisibility(View.VISIBLE);
                 equation.setVisibility(View.GONE);
                 button0.setVisibility(View.GONE);
                 button1.setVisibility(View.GONE);
                 button2.setVisibility(View.GONE);
                 button3.setVisibility(View.GONE);
+
+                currentScore = 0;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    vibrator.vibrate(500);
+                }
+
+                MediaPlayer song = MediaPlayer.create(this, R.raw.bagpipevictory28720); // https://pixabay.com/sound-effects/search/victory/
+                song.start();
             } else {
                 nextRound();
             }
         }
         else {
-            youLose.setText("game over\nfinal score: " + currentScore);
-            youLose.setVisibility(View.VISIBLE);
+            setGameOverDetails();
+
+            gameOverMsg.setText("game over\nfinal score: " + currentScore);
+            gameOverMsg.setVisibility(View.VISIBLE);
             startButton.setVisibility(View.VISIBLE);
             equation.setVisibility(View.GONE);
             button0.setVisibility(View.GONE);
@@ -213,9 +240,18 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void setGameOverDetails() {
+        Float elapsedTime = (float) (System.currentTimeMillis() - timeStart);
+        String d = String.format("%.2f", elapsedTime / 1000.0f) + " seconds\n";
+        d += currentScore > 0 ? String.format("%.3f", elapsedTime / currentScore / 1000.0f) + " average" : "";
+        gameOverDetailsMsg.setText(d);
+        gameOverDetailsMsg.setVisibility(View.VISIBLE);
+    }
+
     private void startClick() {
         startButton.setVisibility(View.GONE);
-        youLose.setVisibility(View.GONE);
+        gameOverMsg.setVisibility(View.GONE);
+        gameOverDetailsMsg.setVisibility(View.GONE);
         equation.setVisibility(View.VISIBLE);
         button0.setVisibility(View.VISIBLE);
         button1.setVisibility(View.VISIBLE);

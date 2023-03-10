@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         centuryButton = (Button) findViewById(R.id.centuryButton);
         centuryButton.setOnClickListener(view -> startClick(GameType.CENTURY));
 
-        ultimateChallengeButton = (Button) findViewById(R.id.ultimateChallengeButton);
+        ultimateChallengeButton = (Button) findViewById(R.id.menuButton);
         ultimateChallengeButton.setOnClickListener(view -> startClick(GameType.ULTIMATECHALLENGE));
     }
 
