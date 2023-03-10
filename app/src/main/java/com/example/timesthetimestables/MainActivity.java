@@ -1,13 +1,7 @@
 package com.example.timesthetimestables;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -17,6 +11,9 @@ import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -198,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Integer answerGenerator(Integer a, Integer b){
-        Integer retVal = 0;
+        Integer retVal;
 
         Integer aOffset = a + r.nextInt(2) - 1;
         Integer bOffset = b + r.nextInt(2) - 1;
