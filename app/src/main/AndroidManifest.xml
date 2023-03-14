@@ -19,7 +19,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Times the Times Tables by Tom Clark">
+            android:label="Times the Times Tables for Thomas">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

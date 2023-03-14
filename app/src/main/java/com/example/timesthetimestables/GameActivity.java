@@ -305,10 +305,33 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setScore() {
-        if(currentScore > highScore){
-            highScore = currentScore;
+
+
+
+
+
+        // if there's an array of answers then show how many are left
+        // else score / highscore
+        switch (gameType) {
+            case ULTIMATECHALLENGE:
+                if(currentScore > highScore){
+                    highScore = currentScore;
+                }
+                getSupportActionBar().setTitle("Score: " + currentScore + "      High Score: " + highScore);
+                break;
+            case EASYPEASY:
+            case SQUARESBEARS:
+            case CENTURY:
+                getSupportActionBar().setTitle("Score: " + currentScore + "      Remaining: " + flashCard.size());
+                break;
         }
-        getSupportActionBar().setTitle("Score: " + currentScore + "      High Score: " + highScore);
+
+
+
+
+
+
+
     }
 
     private Integer answerGenerator(Integer a, Integer b){
