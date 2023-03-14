@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private Button squaresBearsButton;
     private Button centuryButton;
     private Button ultimateChallengeButton;
+    private TextView whatTextView;
+    private TextView bangTextView;
 
     private Random r = new Random();
 
@@ -36,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
         ultimateChallengeButton = (Button) findViewById(R.id.menuButton);
         ultimateChallengeButton.setOnClickListener(view -> startClick(GameType.ULTIMATECHALLENGE));
+
+        whatTextView = (TextView) findViewById(R.id.whatTextView);
+        whatTextView.setOnClickListener(view -> whatTextViewClick());
+
+        bangTextView = (TextView) findViewById(R.id.bangTextView);
+        bangTextView.setOnClickListener(view -> bangTextViewClick());
+
     }
 
     @Override
@@ -85,6 +95,16 @@ public class MainActivity extends AppCompatActivity {
         //Add the bundle to the intent
         intent.putExtras(bundle);
 
+        startActivity(intent);
+    }
+
+    private void whatTextViewClick() {
+        Intent intent = new Intent(this, RulesActivity.class);
+        startActivity(intent);
+    }
+
+    private void bangTextViewClick() {
+        Intent intent = new Intent(this, LeaderboardActivity.class);
         startActivity(intent);
     }
 

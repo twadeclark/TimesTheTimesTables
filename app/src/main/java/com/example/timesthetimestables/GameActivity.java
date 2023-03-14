@@ -305,13 +305,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setScore() {
-
-
-
-
-
-        // if there's an array of answers then show how many are left
-        // else score / highscore
         switch (gameType) {
             case ULTIMATECHALLENGE:
                 if(currentScore > highScore){
@@ -325,13 +318,6 @@ public class GameActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("Score: " + currentScore + "      Remaining: " + flashCard.size());
                 break;
         }
-
-
-
-
-
-
-
     }
 
     private Integer answerGenerator(Integer a, Integer b){
