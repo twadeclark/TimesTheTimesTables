@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sample_text"><![CDATA[
+    <string name="rulesText"><![CDATA[
 <h2>Easy Peasy</h2>
 <small>(66 questions)</small><br />
 Just the easiest from the times tables, but pay attention when they come at you fast!<br /><br />

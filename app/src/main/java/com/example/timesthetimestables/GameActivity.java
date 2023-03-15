@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -87,11 +88,25 @@ public class GameActivity extends AppCompatActivity {
         timeStart = System.currentTimeMillis();
         startClick();
 
+//        test data
 //        saveInitials("TOM", 111111.11f, GameType.LULUMODE);
 //        saveInitials("DAD", 222222.22f, GameType.EASYPEASY);
 //        saveInitials("POO", 333333.33f, GameType.SQUARESBEARS);
 //        saveInitials("LOL", 444444.44f, GameType.CENTURY);
 //        saveInitials("_X_", 555555.55f, GameType.ULTIMATECHALLENGE);
+
+//        clear it out
+//        SharedPreferences settings;
+//        settings = this.getSharedPreferences(GameType.LULUMODE.toString(), Context.MODE_PRIVATE);
+//        settings.edit().clear().commit();
+//        settings = this.getSharedPreferences(GameType.EASYPEASY.toString(), Context.MODE_PRIVATE);
+//        settings.edit().clear().commit();
+//        settings = this.getSharedPreferences(GameType.SQUARESBEARS.toString(), Context.MODE_PRIVATE);
+//        settings.edit().clear().commit();
+//        settings = this.getSharedPreferences(GameType.CENTURY.toString(), Context.MODE_PRIVATE);
+//        settings.edit().clear().commit();
+//        settings = this.getSharedPreferences(GameType.ULTIMATECHALLENGE.toString(), Context.MODE_PRIVATE);
+//        settings.edit().clear().commit();
     }
 
     private void setFlashCards() {

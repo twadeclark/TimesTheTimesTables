@@ -29,7 +29,8 @@
                 android:fontFamily="casual"
                 android:text="Lulu Mode"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/luluModeTextView"
@@ -37,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textAlignment="center"
-                android:textSize="48sp" />
+                android:textSize="48sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textView1"

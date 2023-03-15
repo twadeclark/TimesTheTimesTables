@@ -79,6 +79,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.541" />
 
+    <TextView
+        android:id="@+id/dotdotdotTextView"
+        android:layout_width="85dp"
+        android:layout_height="88dp"
+        android:fontFamily="serif"
+        android:rotation="-10"
+        android:text=" ..."
+        android:textSize="60sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ultimateChallengeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.589"
+        app:layout_constraintStart_toEndOf="@+id/centuryButton"
+        app:layout_constraintTop_toBottomOf="@+id/squaresBearsButton"
+        app:layout_constraintVertical_bias="0.36" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/luluModeButton"
         android:layout_width="wrap_content"
@@ -87,6 +103,7 @@
         android:text="Lulu\nMode"
         android:textColor="@color/black"
         android:textSize="24sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.055"

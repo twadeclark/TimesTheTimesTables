@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="aboutText"><![CDATA[
+<h2>Times the Times Tables for Thomas</h2>
+Learn your times tables <i>the fun way!</i>
+<br /><br />
+
+<h2>Privacy Statement</h2>
+No ads, no logins, no spyware, no tracking.
+<br /><br />
+
+<h2>About Me</h2>
+Hi. My name is Tom Clark. I do a lot more than make apps. Always looking for an interesting project. Contact me at:<p>
+<a href="mailto:twadeclark@gmail.com">twadeclark@gmail.com</a>
+]]></string>
+</resources>

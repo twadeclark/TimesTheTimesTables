@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private Button luluModeButton;
     private TextView whatTextView;
     private TextView bangTextView;
+    private TextView dotdotdotTextView;
+
 
     private Random r = new Random();
 
@@ -41,14 +43,17 @@ public class MainActivity extends AppCompatActivity {
         ultimateChallengeButton = (Button) findViewById(R.id.ultimateChallengeButton);
         ultimateChallengeButton.setOnClickListener(view -> startClick(GameType.ULTIMATECHALLENGE));
 
+        luluModeButton = (Button) findViewById(R.id.luluModeButton);
+        luluModeButton.setOnClickListener(view -> startClick(GameType.LULUMODE));
+
         whatTextView = (TextView) findViewById(R.id.whatTextView);
         whatTextView.setOnClickListener(view -> whatTextViewClick());
 
         bangTextView = (TextView) findViewById(R.id.bangTextView);
         bangTextView.setOnClickListener(view -> bangTextViewClick());
 
-        luluModeButton = (Button) findViewById(R.id.luluModeButton);
-        luluModeButton.setOnClickListener(view -> startClick(GameType.LULUMODE));
+        dotdotdotTextView = (TextView) findViewById(R.id.dotdotdotTextView);
+        dotdotdotTextView.setOnClickListener(view -> dotdotdotTextViewClick());
 
     }
 
@@ -109,6 +114,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void bangTextViewClick() {
         Intent intent = new Intent(this, LeaderboardActivity.class);
+        startActivity(intent);
+    }
+
+    private void dotdotdotTextViewClick() {
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
