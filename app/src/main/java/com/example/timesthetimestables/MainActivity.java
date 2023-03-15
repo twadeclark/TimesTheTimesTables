@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Button squaresBearsButton;
     private Button centuryButton;
     private Button ultimateChallengeButton;
+    private Button luluModeButton;
     private TextView whatTextView;
     private TextView bangTextView;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         centuryButton = (Button) findViewById(R.id.centuryButton);
         centuryButton.setOnClickListener(view -> startClick(GameType.CENTURY));
 
-        ultimateChallengeButton = (Button) findViewById(R.id.menuButton);
+        ultimateChallengeButton = (Button) findViewById(R.id.ultimateChallengeButton);
         ultimateChallengeButton.setOnClickListener(view -> startClick(GameType.ULTIMATECHALLENGE));
 
         whatTextView = (TextView) findViewById(R.id.whatTextView);
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         bangTextView = (TextView) findViewById(R.id.bangTextView);
         bangTextView.setOnClickListener(view -> bangTextViewClick());
+
+        luluModeButton = (Button) findViewById(R.id.luluModeButton);
+        luluModeButton.setOnClickListener(view -> startClick(GameType.LULUMODE));
 
     }
 

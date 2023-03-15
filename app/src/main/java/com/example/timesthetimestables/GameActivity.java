@@ -2,6 +2,7 @@ package com.example.timesthetimestables;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 
@@ -13,7 +14,9 @@ import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +28,7 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity {
     private final Integer MaxValue = 10;
 
-    private Button startButton;
+    private Button saveOrMenuButton;
     private TextView equation;
     private TextView gameOverMsg;
     private TextView gameOverDetailsMsg;
@@ -35,6 +38,10 @@ public class GameActivity extends AppCompatActivity {
     private Button button2;
     private Button button3;
     private Vibrator vibrator;
+
+    private Spinner spinner1;
+    private Spinner spinner2;
+    private Spinner spinner3;
 
     private GameType gameType;
     private Random r = new Random();
@@ -51,7 +58,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        startButton = (Button) findViewById(R.id.menuButton);
+        saveOrMenuButton = (Button) findViewById(R.id.saveOrMenuButton);
         equation = (TextView) findViewById(R.id.equation);
         gameOverMsg = (TextView) findViewById(R.id.gameOverMsg);
         gameOverDetailsMsg = (TextView) findViewById(R.id.gameOverDetailsMsg);
@@ -61,18 +68,21 @@ public class GameActivity extends AppCompatActivity {
         button3 = (Button) findViewById(R.id.button3);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        startButton.setOnClickListener(view -> finish());
         button0.setOnClickListener(view -> answerCheck(0));
         button1.setOnClickListener(view -> answerCheck(1));
         button2.setOnClickListener(view -> answerCheck(2));
         button3.setOnClickListener(view -> answerCheck(3));
 
+        spinner1 = (Spinner) findViewById(R.id.spinner1);
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
+        spinner3 = (Spinner) findViewById(R.id.spinner3);
+
         Bundle bundle = getIntent().getExtras();
         gameType = GameType.valueOf(bundle.getString("GameType"));
 
         setFlashCards();
-
         scrambleButtons();
+        setupInitials();
 
         timeStart = System.currentTimeMillis();
         startClick();
@@ -112,11 +122,13 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            default:
+                flashCard.add("1,1");
         }
     }
 
     private void scrambleButtons() {
-        startButton.setRotation(r.nextInt(20) - 10);
+        saveOrMenuButton.setRotation(r.nextInt(20) - 10);
         button0.setRotation(r.nextInt(20) - 10);
         button1.setRotation(r.nextInt(20) - 10);
         button2.setRotation(r.nextInt(20) - 10);
@@ -126,7 +138,7 @@ public class GameActivity extends AppCompatActivity {
 
         gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, gradientColorGeneratorLight());
         gradientDrawable.setCornerRadius(80f);
-        startButton.setBackground(gradientDrawable);
+        saveOrMenuButton.setBackground(gradientDrawable);
 
         gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, gradientColorGeneratorLight());
         gradientDrawable.setCornerRadius(80f);
@@ -190,66 +202,82 @@ public class GameActivity extends AppCompatActivity {
                     g += "Big Winner\n";
                 }
 
-                setGameOverDetails();
-
-                gameOverMsg.setText(g);
-                gameOverMsg.setVisibility(View.VISIBLE);
-                startButton.setVisibility(View.VISIBLE);
-                equation.setVisibility(View.GONE);
-                button0.setVisibility(View.GONE);
-                button1.setVisibility(View.GONE);
-                button2.setVisibility(View.GONE);
-                button3.setVisibility(View.GONE);
-
-                currentScore = 0;
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                } else {
-                    vibrator.vibrate(500);
-                }
-
-                MediaPlayer song = MediaPlayer.create(this, R.raw.bagpipevictory28720); // https://pixabay.com/sound-effects/search/victory/
-                song.start();
+                setGameOverDetails(g, true);
             } else {
                 nextRound();
             }
+        } else {
+            setGameOverDetails("game over\nfinal score: " + currentScore, false);
         }
-        else {
-            setGameOverDetails();
+    }
 
-            gameOverMsg.setText("game over\nfinal score: " + currentScore);
-            gameOverMsg.setVisibility(View.VISIBLE);
-            startButton.setVisibility(View.VISIBLE);
-            equation.setVisibility(View.GONE);
-            button0.setVisibility(View.GONE);
-            button1.setVisibility(View.GONE);
-            button2.setVisibility(View.GONE);
-            button3.setVisibility(View.GONE);
+    private void setGameOverDetails(String msg, Boolean didWin) {
+        Float elapsedTime = (float) (System.currentTimeMillis() - timeStart);
+        String goMsg = String.format("%.2f", elapsedTime / 1000.0f) + " seconds\n";
+        goMsg += currentScore > 0 ? String.format("%.3f", elapsedTime / currentScore / 1000.0f) + " average" : "";
+        gameOverDetailsMsg.setText(goMsg);
+        gameOverDetailsMsg.setVisibility(View.VISIBLE);
 
-            currentScore = 0;
+        gameOverMsg.setText(msg);
+        gameOverMsg.setVisibility(View.VISIBLE);
+        saveOrMenuButton.setVisibility(View.VISIBLE);
+        equation.setVisibility(View.GONE);
+        button0.setVisibility(View.GONE);
+        button1.setVisibility(View.GONE);
+        button2.setVisibility(View.GONE);
+        button3.setVisibility(View.GONE);
+        currentScore = 0;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(500);
+        }
+
+        if (didWin) {
+            MediaPlayer song = MediaPlayer.create(this, R.raw.bagpipevictory28720); // https://pixabay.com/sound-effects/search/victory/
+            song.start();
+
+            SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
+            float hiScoreTime = prefs.getFloat("elapsedTime", Float.MAX_VALUE);
+
+            if (elapsedTime < hiScoreTime) {
+                setupInitials();
+                saveOrMenuButton.setOnClickListener(view -> saveInitials(elapsedTime));
+                saveOrMenuButton.setText("save");
             } else {
-                vibrator.vibrate(500);
+                saveOrMenuButton.setOnClickListener(view -> finish());
+                saveOrMenuButton.setText("menu");
             }
-
+        } else {
+            saveOrMenuButton.setOnClickListener(view -> finish());
+            saveOrMenuButton.setText("menu");
             MediaPlayer song = MediaPlayer.create(this, R.raw.sfxdefeat1);
             song.start();
         }
     }
 
-    private void setGameOverDetails() {
-        Float elapsedTime = (float) (System.currentTimeMillis() - timeStart);
-        String d = String.format("%.2f", elapsedTime / 1000.0f) + " seconds\n";
-        d += currentScore > 0 ? String.format("%.3f", elapsedTime / currentScore / 1000.0f) + " average" : "";
-        gameOverDetailsMsg.setText(d);
-        gameOverDetailsMsg.setVisibility(View.VISIBLE);
+    private void saveInitials(float elapsedTime) {
+        SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat("elapsedTime", elapsedTime);
+        editor.commit();
+        finish();
+    }
+
+    private void setupInitials() {
+        spinner1.setVisibility(View.VISIBLE);
+        spinner2.setVisibility(View.VISIBLE);
+        spinner3.setVisibility(View.VISIBLE);
+        String[] items = new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "_"};
+        ArrayAdapter<String> ad = new ArrayAdapter<>(this, R.layout.my_spinner, items);
+        spinner1.setAdapter(ad);
+        spinner2.setAdapter(ad);
+        spinner3.setAdapter(ad);
     }
 
     private void startClick() {
-        startButton.setVisibility(View.GONE);
+        saveOrMenuButton.setVisibility(View.GONE);
         gameOverMsg.setVisibility(View.GONE);
         gameOverDetailsMsg.setVisibility(View.GONE);
         equation.setVisibility(View.VISIBLE);
@@ -257,6 +285,9 @@ public class GameActivity extends AppCompatActivity {
         button1.setVisibility(View.VISIBLE);
         button2.setVisibility(View.VISIBLE);
         button3.setVisibility(View.VISIBLE);
+        spinner1.setVisibility(View.GONE);
+        spinner2.setVisibility(View.GONE);
+        spinner3.setVisibility(View.GONE);
 
         currentScore = 0;
         setScore();

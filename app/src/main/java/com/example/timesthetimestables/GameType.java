@@ -4,5 +4,6 @@ public enum GameType {
     EASYPEASY,
     SQUARESBEARS,
     CENTURY,
-    ULTIMATECHALLENGE
+    ULTIMATECHALLENGE,
+    LULUMODE
 }
