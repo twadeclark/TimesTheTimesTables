@@ -86,6 +86,18 @@ public class GameActivity extends AppCompatActivity {
 
         timeStart = System.currentTimeMillis();
         startClick();
+
+
+
+
+        saveInitials("TOM", 111111.11f, GameType.LULUMODE);
+        saveInitials("DAD", 222222.22f, GameType.EASYPEASY);
+        saveInitials("POO", 333333.33f, GameType.SQUARESBEARS);
+        saveInitials("LOL", 444444.44f, GameType.CENTURY);
+        saveInitials("_X_", 555555.55f, GameType.ULTIMATECHALLENGE);
+
+
+
     }
 
     private void setFlashCards() {
@@ -257,12 +269,18 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void saveInitials(float elapsedTime) {
-        SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
+    private void saveInitials(String initials, float elapsedTime, GameType gt) {
+        SharedPreferences prefs = this.getSharedPreferences(gt.toString(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putFloat("elapsedTime", elapsedTime);
+        editor.putString("initials", initials);
         editor.commit();
         finish();
+    }
+
+    private void saveInitials(float elapsedTime) {
+        String initials = spinner1.getSelectedItem().toString() + spinner2.getSelectedItem().toString() + spinner3.getSelectedItem().toString();
+        saveInitials(initials, elapsedTime, gameType);
     }
 
     private void setupInitials() {
