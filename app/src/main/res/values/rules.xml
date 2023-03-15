@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sample_text"><![CDATA[
+<h2>Easy Peasy</h2>
+<small>(66 questions)</small><br />
+Just the easiest from the times tables, but pay attention when they come at you fast!<br /><br />
+<h2>Squares & Bears</h2>
+<small>(20 questions)</small><br />
+Each number times itself, plus those 6, 7, 8 hard to remember questions.<br /><br />
+<h2>Century Club</h2>
+<small>(121 questions)</small><br />
+Each of the questions from zero to ten times zero to ten, plus the squares twice.<br /><br />
+<h2>Ultimate High Score Challenge</h2>
+See how many you can get right in a row! No limit.<br />
+]]></string>
+</resources>

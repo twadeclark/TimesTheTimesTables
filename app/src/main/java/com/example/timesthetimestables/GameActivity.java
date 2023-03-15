@@ -87,17 +87,11 @@ public class GameActivity extends AppCompatActivity {
         timeStart = System.currentTimeMillis();
         startClick();
 
-
-
-
-        saveInitials("TOM", 111111.11f, GameType.LULUMODE);
-        saveInitials("DAD", 222222.22f, GameType.EASYPEASY);
-        saveInitials("POO", 333333.33f, GameType.SQUARESBEARS);
-        saveInitials("LOL", 444444.44f, GameType.CENTURY);
-        saveInitials("_X_", 555555.55f, GameType.ULTIMATECHALLENGE);
-
-
-
+//        saveInitials("TOM", 111111.11f, GameType.LULUMODE);
+//        saveInitials("DAD", 222222.22f, GameType.EASYPEASY);
+//        saveInitials("POO", 333333.33f, GameType.SQUARESBEARS);
+//        saveInitials("LOL", 444444.44f, GameType.CENTURY);
+//        saveInitials("_X_", 555555.55f, GameType.ULTIMATECHALLENGE);
     }
 
     private void setFlashCards() {

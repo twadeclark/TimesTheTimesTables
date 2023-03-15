@@ -43,7 +43,7 @@
                 android:fontFamily="casual"
                 android:text="Rules"
                 android:textAlignment="center"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

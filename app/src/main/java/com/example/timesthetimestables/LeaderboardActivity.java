@@ -14,6 +14,8 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
+        getSupportActionBar().setTitle("Leaderboard");
+
         TextView tmpTextView;
         SharedPreferences prefs;
 
