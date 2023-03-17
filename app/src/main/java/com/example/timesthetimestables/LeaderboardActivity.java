@@ -43,20 +43,29 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         tmpTextView = (TextView) findViewById(R.id.UltimateTextView);
         prefs = this.getSharedPreferences(GameType.ULTIMATECHALLENGE.toString(), Context.MODE_PRIVATE);
-        setHighScores(tmpTextView, prefs);
+        setChallengeHighScore(tmpTextView, prefs);
 
     }
 
     private void setHighScores(TextView tmpTextView, SharedPreferences prefs) {
-        String tmp;
-        float bestTime;
-        String initials;
-        bestTime = prefs.getFloat("elapsedTime", Float.MAX_VALUE);
-        initials = prefs.getString("initials", "");
+        int score = prefs.getInt("score", 0);
+        String initials = prefs.getString("initials", "");
 
-        if (bestTime < Float.MAX_VALUE) {
-            tmp = initials + " \t " + String.format("%.2f", bestTime / 1000.0f) + "\n";
+        if (score > 0) {
+            String tmp = initials + " \t " + String.format("%.2f", (float)score / 1000.0f) + "\n";
             tmpTextView.setText(tmp);
         }
     }
+
+    private void setChallengeHighScore(TextView tmpTextView, SharedPreferences prefs) {
+        int score = prefs.getInt("score", 0);
+        String initials = prefs.getString("initials", "");
+
+        if (score > 0) {
+            int i = (int)score;
+            String tmp = initials + " \t " + i + "\n";
+            tmpTextView.setText(tmp);
+        }
+    }
+
 }

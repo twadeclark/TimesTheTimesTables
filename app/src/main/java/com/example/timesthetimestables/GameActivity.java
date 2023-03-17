@@ -13,7 +13,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -47,7 +46,8 @@ public class GameActivity extends AppCompatActivity {
     private GameType gameType;
     private Random r = new Random();
     private Integer answer;
-    private Integer currentScore = 0, highScore = 0;
+    volatile Integer currentScore = 0;
+    private Integer highScore = 0;
     private Integer[] possibleAnswers;
     private long timeStart;
 
@@ -81,21 +81,21 @@ public class GameActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         gameType = GameType.valueOf(bundle.getString("GameType"));
 
-        setFlashCards();
+        loadFlashCards();
         scrambleButtons();
-        setupInitials();
+//        setupInitials();
 
         timeStart = System.currentTimeMillis();
-        startClick();
+        startNewGame();
 
-//        test data
-//        saveInitials("TOM", 111111.11f, GameType.LULUMODE);
-//        saveInitials("DAD", 222222.22f, GameType.EASYPEASY);
-//        saveInitials("POO", 333333.33f, GameType.SQUARESBEARS);
-//        saveInitials("LOL", 444444.44f, GameType.CENTURY);
-//        saveInitials("_X_", 555555.55f, GameType.ULTIMATECHALLENGE);
+//        // test data
+//        saveInitials("TOM", 111111, GameType.LULUMODE);
+//        saveInitials("DAD", 222222, GameType.EASYPEASY);
+//        saveInitials("POO", 333333, GameType.SQUARESBEARS);
+//        saveInitials("LOL", 444444, GameType.CENTURY);
+//        saveInitials("_X_", 555555, GameType.ULTIMATECHALLENGE);
 
-//        clear it out
+//        // clear it out
 //        SharedPreferences settings;
 //        settings = this.getSharedPreferences(GameType.LULUMODE.toString(), Context.MODE_PRIVATE);
 //        settings.edit().clear().commit();
@@ -109,20 +109,20 @@ public class GameActivity extends AppCompatActivity {
 //        settings.edit().clear().commit();
     }
 
-    private void setFlashCards() {
+    private void loadFlashCards() {
         Integer a, s;
 
         switch (gameType) {
             case ULTIMATECHALLENGE:
-                flashCard.add("0,0");
+                flashCard.add("0,0"); // stub
                 break;
             case EASYPEASY:
                 for(a = 0; a <= MaxValue; a++) {
-                    for(s = 0; s <= 1; s++ ) {
-                        flashCard.add(a.toString() + "," + s.toString());
-                        flashCard.add(s.toString() + "," + a.toString());
-                    }
+                    flashCard.add(a.toString() + ",0");
+                    flashCard.add(a.toString() + ",1");
                     flashCard.add(a.toString() + ",10");
+                    flashCard.add("0," + a.toString());
+                    flashCard.add("1," + a.toString());
                     flashCard.add("10," + a.toString());
                 }
                 break;
@@ -167,7 +167,6 @@ public class GameActivity extends AppCompatActivity {
         button1.setBackground(gradientDrawable);
         button2.setBackground(gradientDrawable);
         button3.setBackground(gradientDrawable);
-
     }
 
     @NonNull
@@ -202,108 +201,7 @@ public class GameActivity extends AppCompatActivity {
         return ButtonColors;
     }
 
-    private void answerCheck(Integer i) {
-        if(possibleAnswers[i].equals(answer) ) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE ));
-            }
-            currentScore++;
-            setScore();
-
-            if (flashCard.isEmpty()) {
-                String g = "You Win\n";
-
-                if(gameType==GameType.EASYPEASY) {
-                    g += "Easy Peasy\n";
-                } else if(gameType==GameType.SQUARESBEARS) {
-                    g += "Squares\n& Bears\n";
-                } else if(gameType==GameType.CENTURY) {
-                    g += "Century Club\n";
-                } else {
-                    g += "Big Winner\n";
-                }
-
-                setGameOverDetails(g, true);
-            } else {
-                nextRound();
-            }
-        } else {
-            setGameOverDetails("game over\nfinal score: " + currentScore, false);
-        }
-    }
-
-    private void setGameOverDetails(String msg, Boolean didWin) {
-        Float elapsedTime = (float) (System.currentTimeMillis() - timeStart);
-        String goMsg = String.format("%.2f", elapsedTime / 1000.0f) + " seconds\n";
-        goMsg += currentScore > 0 ? String.format("%.3f", elapsedTime / currentScore / 1000.0f) + " average" : "";
-        gameOverDetailsMsg.setText(goMsg);
-        gameOverDetailsMsg.setVisibility(View.VISIBLE);
-
-        gameOverMsg.setText(msg);
-        gameOverMsg.setVisibility(View.VISIBLE);
-        saveOrMenuButton.setVisibility(View.VISIBLE);
-        equation.setVisibility(View.GONE);
-        button0.setVisibility(View.GONE);
-        button1.setVisibility(View.GONE);
-        button2.setVisibility(View.GONE);
-        button3.setVisibility(View.GONE);
-        currentScore = 0;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(500);
-        }
-
-        if (didWin) {
-            MediaPlayer song = MediaPlayer.create(this, R.raw.bagpipevictory28720); // https://pixabay.com/sound-effects/search/victory/
-            song.start();
-
-            SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
-            float hiScoreTime = prefs.getFloat("elapsedTime", Float.MAX_VALUE);
-
-            if (elapsedTime < hiScoreTime) {
-                setupInitials();
-                saveOrMenuButton.setOnClickListener(view -> saveInitials(elapsedTime));
-                saveOrMenuButton.setText("save");
-            } else {
-                saveOrMenuButton.setOnClickListener(view -> finish());
-                saveOrMenuButton.setText("menu");
-            }
-        } else {
-            saveOrMenuButton.setOnClickListener(view -> finish());
-            saveOrMenuButton.setText("menu");
-            MediaPlayer song = MediaPlayer.create(this, R.raw.sfxdefeat1);
-            song.start();
-        }
-    }
-
-    private void saveInitials(String initials, float elapsedTime, GameType gt) {
-        SharedPreferences prefs = this.getSharedPreferences(gt.toString(), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putFloat("elapsedTime", elapsedTime);
-        editor.putString("initials", initials);
-        editor.commit();
-        finish();
-    }
-
-    private void saveInitials(float elapsedTime) {
-        String initials = spinner1.getSelectedItem().toString() + spinner2.getSelectedItem().toString() + spinner3.getSelectedItem().toString();
-        saveInitials(initials, elapsedTime, gameType);
-    }
-
-    private void setupInitials() {
-        spinner1.setVisibility(View.VISIBLE);
-        spinner2.setVisibility(View.VISIBLE);
-        spinner3.setVisibility(View.VISIBLE);
-        String[] items = new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "_"};
-        ArrayAdapter<String> ad = new ArrayAdapter<>(this, R.layout.my_spinner, items);
-        spinner1.setAdapter(ad);
-        spinner2.setAdapter(ad);
-        spinner3.setAdapter(ad);
-    }
-
-    private void startClick() {
+    private void startNewGame() {
         saveOrMenuButton.setVisibility(View.GONE);
         gameOverMsg.setVisibility(View.GONE);
         gameOverDetailsMsg.setVisibility(View.GONE);
@@ -321,9 +219,24 @@ public class GameActivity extends AppCompatActivity {
         nextRound();
     }
 
+    private void setScore() {
+        switch (gameType) {
+            case ULTIMATECHALLENGE:
+                if(currentScore > highScore){
+                    highScore = currentScore;
+                }
+                getSupportActionBar().setTitle("Score: " + currentScore);
+                break;
+            case EASYPEASY:
+            case SQUARESBEARS:
+            case CENTURY:
+                getSupportActionBar().setTitle("Score: " + currentScore + "      Remaining: " + flashCard.size());
+                break;
+        }
+    }
+
     private void nextRound() {
-        Integer e1 = 0;
-        Integer e2 = 0;
+        Integer e1, e2;
 
         if (gameType == GameType.ULTIMATECHALLENGE) {
             e1 = r.nextInt(MaxValue + 1);
@@ -362,20 +275,133 @@ public class GameActivity extends AppCompatActivity {
         scrambleButtons();
     }
 
-    private void setScore() {
-        switch (gameType) {
-            case ULTIMATECHALLENGE:
-                if(currentScore > highScore){
-                    highScore = currentScore;
+    private void answerCheck(Integer i) {
+        if(possibleAnswers[i].equals(answer) ) { // right answer
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE ));
+            }
+            currentScore++;
+            setScore();
+
+            if (flashCard.isEmpty()) { // game over, win!
+                String g = "You Win\n";
+
+                if(gameType==GameType.EASYPEASY) {
+                    g += "Easy Peasy";
+                } else if(gameType==GameType.SQUARESBEARS) {
+                    g += "Squares\n& Bears";
+                } else if(gameType==GameType.CENTURY) {
+                    g += "Century Club";
+                } else {
+                    g += "Big Winner";
                 }
-                getSupportActionBar().setTitle("Score: " + currentScore + "      High Score: " + highScore);
-                break;
-            case EASYPEASY:
-            case SQUARESBEARS:
-            case CENTURY:
-                getSupportActionBar().setTitle("Score: " + currentScore + "      Remaining: " + flashCard.size());
-                break;
+
+                int elapsedTime = setGameOverDetails(g);
+                regularWin(elapsedTime);
+            } else {
+                nextRound();
+            }
+        } else { // wrong answer
+            setGameOverDetails("game over\nfinal score: " + currentScore);
+
+            if (gameType == GameType.ULTIMATECHALLENGE) {
+                ultimateGameOver();
+            } else {
+                regularLoss();
+            }
         }
+    }
+
+    private int setGameOverDetails(String gameOverMsgIn) {
+        int elapsedTime = (int) (System.currentTimeMillis() - timeStart);
+        String gameOverDetails = String.format("%.2f", (float)elapsedTime / 1000.0f) + " seconds";
+//        gameOverDetails += currentScore > 0 ? String.format("%.3f", (float)elapsedTime / (float)currentScore / 1000.0f) + " average" : "";
+        gameOverDetailsMsg.setText(gameOverDetails);
+        gameOverDetailsMsg.setVisibility(View.VISIBLE);
+
+        gameOverMsg.setText(gameOverMsgIn);
+        gameOverMsg.setVisibility(View.VISIBLE);
+        saveOrMenuButton.setVisibility(View.VISIBLE);
+        equation.setVisibility(View.GONE);
+        button0.setVisibility(View.GONE);
+        button1.setVisibility(View.GONE);
+        button2.setVisibility(View.GONE);
+        button3.setVisibility(View.GONE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(500);
+        }
+
+        return elapsedTime;
+    }
+
+    private void regularWin(int elapsedTime) {
+        SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
+        float hiScoreTime = prefs.getFloat("elapsedTime", Float.MAX_VALUE);
+
+        if (elapsedTime < hiScoreTime) {
+            setupInitials();
+            saveOrMenuButton.setOnClickListener(view -> saveInitials(elapsedTime));
+            saveOrMenuButton.setText("save");
+        } else {
+            saveOrMenuButton.setOnClickListener(view -> finish());
+            saveOrMenuButton.setText("menu");
+        }
+
+        playWinSong();
+    }
+
+    private void playWinSong() {
+        MediaPlayer song = MediaPlayer.create(this, R.raw.bagpipevictory28720); // https://pixabay.com/sound-effects/search/victory/
+        song.start();
+    }
+
+    private void regularLoss() {
+        saveOrMenuButton.setOnClickListener(view -> finish());
+        saveOrMenuButton.setText("menu");
+        MediaPlayer song = MediaPlayer.create(this, R.raw.sfxdefeat1);
+        song.start();
+    }
+
+    private void ultimateGameOver() {
+        SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
+        int hiScore = prefs.getInt("score", 0);
+
+        if (currentScore > hiScore) {
+            setupInitials();
+            saveOrMenuButton.setOnClickListener(view -> saveInitials(currentScore));
+            saveOrMenuButton.setText("save");
+            playWinSong();
+        } else {
+            regularLoss();
+        }
+    }
+
+    private void saveInitials(int score) {
+        String initials = spinner1.getSelectedItem().toString() + spinner2.getSelectedItem().toString() + spinner3.getSelectedItem().toString();
+        saveInitials(initials, score, gameType);
+    }
+
+    private void saveInitials(String initials, int score, GameType gt) {
+        SharedPreferences prefs = this.getSharedPreferences(gt.toString(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("score", score);
+        editor.putString("initials", initials);
+        editor.commit();
+        finish();
+    }
+
+    private void setupInitials() {
+        spinner1.setVisibility(View.VISIBLE);
+        spinner2.setVisibility(View.VISIBLE);
+        spinner3.setVisibility(View.VISIBLE);
+        String[] items = new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "_"};
+        ArrayAdapter<String> ad = new ArrayAdapter<>(this, R.layout.my_spinner, items);
+        spinner1.setAdapter(ad);
+        spinner2.setAdapter(ad);
+        spinner3.setAdapter(ad);
     }
 
     private Integer answerGenerator(Integer a, Integer b){

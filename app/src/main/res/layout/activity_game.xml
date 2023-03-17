@@ -139,29 +139,29 @@
         android:id="@+id/spinner1"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
         android:contentDescription="A"
-        app:layout_constraintBottom_toTopOf="@+id/equation"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameOverDetailsMsg" />
 
     <Spinner
         android:id="@+id/spinner2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
         android:contentDescription="B"
-        app:layout_constraintBottom_toTopOf="@+id/equation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameOverDetailsMsg" />
 
     <Spinner
         android:id="@+id/spinner3"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
         android:contentDescription="C"
         android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@+id/equation"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameOverDetailsMsg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
