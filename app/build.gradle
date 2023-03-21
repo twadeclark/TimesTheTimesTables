@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.timesthetimestables'
+    namespace 'com.twadeclark.timesthetimestables'
     compileSdk 33
 
     defaultConfig {
