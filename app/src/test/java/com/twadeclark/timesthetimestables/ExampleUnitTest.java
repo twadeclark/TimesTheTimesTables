@@ -1,4 +1,4 @@
-package com.example.timesthetimestables;
+package com.twadeclark.timesthetimestables;
 
 import org.junit.Test;
 

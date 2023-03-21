@@ -1,19 +1,10 @@
-package com.example.timesthetimestables;
+package com.twadeclark.timesthetimestables;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.widget.Button;
 import android.widget.TextView;
 

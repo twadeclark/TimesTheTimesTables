@@ -7,7 +7,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.timesthetimestables"
+        applicationId "com.twadeclark.timesthetimestables"
         minSdk 24
         targetSdk 33
         versionCode 1
