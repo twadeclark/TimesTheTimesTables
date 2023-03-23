@@ -1,5 +1,7 @@
 package com.twadeclark.timesthetimestables;
 
+import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -67,43 +69,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    private void scrambleButton(Button tmpButton) {
-        int i = r.nextInt(40) - 20;
-        tmpButton.setRotation(i);
-        GradientDrawable gradientDrawable;
-        gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, gradientColorGeneratorLight());
-        gradientDrawable.setCornerRadius(80f);
-        tmpButton.setBackground(gradientDrawable);
-    }
-
-    @NonNull
-    private int[] gradientColorGeneratorLight() {
-        int[] startRaw = new int[]{r.nextInt(128) + 128, r.nextInt(128) + 128, r.nextInt(128) + 128};
-        startRaw[r.nextInt(3)] = 255;
-
-        int[] endRaw = new int[]{r.nextInt(128) + 128, r.nextInt(128) + 128, r.nextInt(128) + 128};
-        endRaw[r.nextInt(3)] = 255;
-
-        String startColor = String.format("%02X", startRaw[0]) + String.format("%02X", startRaw[1]) + String.format("%02X", startRaw[2]);
-        String endColor = String.format("%02X", endRaw[0]) + String.format("%02X", endRaw[1]) + String.format("%02X", endRaw[2]);
-
-        int[] ButtonColors = {Color.parseColor("#" + startColor),Color.parseColor("#" + endColor)};
-
-        return ButtonColors;
-    }
-
     private void startClick(GameType gameType) {
         Intent intent = new Intent(this, GameActivity.class);
-
-        //Create the bundle
         Bundle bundle = new Bundle();
-
-        //Add your data to bundle
         bundle.putString("GameType", gameType.toString());
-
-        //Add the bundle to the intent
         intent.putExtras(bundle);
-
         startActivity(intent);
     }
 

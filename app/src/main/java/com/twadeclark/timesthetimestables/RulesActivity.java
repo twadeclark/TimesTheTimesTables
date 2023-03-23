@@ -1,5 +1,7 @@
 package com.twadeclark.timesthetimestables;
 
+import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -20,6 +22,7 @@ public class RulesActivity extends AppCompatActivity {
 
         backButton = (Button) findViewById(R.id.backButton);
         backButton.setOnClickListener(view -> finish());
+        scrambleButton(backButton);
 
         getSupportActionBar().setTitle("Rules");
 

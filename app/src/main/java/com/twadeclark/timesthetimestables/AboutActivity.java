@@ -1,5 +1,7 @@
 package com.twadeclark.timesthetimestables;
 
+import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -20,6 +22,7 @@ public class AboutActivity extends AppCompatActivity {
 
         backButton = (Button) findViewById(R.id.backAboutButton);
         backButton.setOnClickListener(view -> finish());
+        scrambleButton(backButton);
 
         getSupportActionBar().setTitle("About");
 

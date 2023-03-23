@@ -1,5 +1,7 @@
 package com.twadeclark.timesthetimestables;
 
+import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -19,6 +21,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         backButton = (Button) findViewById(R.id.backLeaderButton);
         backButton.setOnClickListener(view -> finish());
+        scrambleButton(backButton);
 
         getSupportActionBar().setTitle("Leaderboard");
 
@@ -48,7 +51,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     private void setHighScores(TextView tmpTextView, SharedPreferences prefs) {
-        int score = prefs.getInt("score", 0);
+        int score = prefs.getInt("bestScore", 0);
         String initials = prefs.getString("initials", "");
 
         if (score > 0) {
@@ -58,7 +61,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     private void setChallengeHighScore(TextView tmpTextView, SharedPreferences prefs) {
-        int score = prefs.getInt("score", 0);
+        int score = prefs.getInt("bestScore", 0);
         String initials = prefs.getString("initials", "");
 
         if (score > 0) {

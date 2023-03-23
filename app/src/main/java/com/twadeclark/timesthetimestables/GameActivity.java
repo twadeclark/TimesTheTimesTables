@@ -1,25 +1,22 @@
 package com.twadeclark.timesthetimestables;
 
+import static com.twadeclark.timesthetimestables.Utils.gradientColorGeneratorLight;
+import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,29 +25,19 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity {
     private final Integer MaxValue = 10;
 
-    private Button saveOrMenuButton;
-    private TextView equation;
-    private TextView gameOverMsg;
-    private TextView gameOverDetailsMsg;
-
     private Button button0;
     private Button button1;
     private Button button2;
     private Button button3;
+    private TextView equation;
     private Vibrator vibrator;
-
-    private Spinner spinner1;
-    private Spinner spinner2;
-    private Spinner spinner3;
 
     private GameType gameType;
     private Random r = new Random();
     private Integer answer;
     volatile Integer currentScore = 0;
-    private Integer highScore = 0;
     private Integer[] possibleAnswers;
     private long timeStart;
-
 
     private ArrayList<String> flashCard = new ArrayList<>();
 
@@ -59,14 +46,11 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        saveOrMenuButton = (Button) findViewById(R.id.saveOrMenuButton);
-        equation = (TextView) findViewById(R.id.equation);
-        gameOverMsg = (TextView) findViewById(R.id.gameOverMsg);
-        gameOverDetailsMsg = (TextView) findViewById(R.id.gameOverDetailsMsg);
         button0 = (Button) findViewById(R.id.button0);
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
+        equation = (TextView) findViewById(R.id.equation);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         button0.setOnClickListener(view -> answerCheck(0));
@@ -74,19 +58,18 @@ public class GameActivity extends AppCompatActivity {
         button2.setOnClickListener(view -> answerCheck(2));
         button3.setOnClickListener(view -> answerCheck(3));
 
-        spinner1 = (Spinner) findViewById(R.id.spinner1);
-        spinner2 = (Spinner) findViewById(R.id.spinner2);
-        spinner3 = (Spinner) findViewById(R.id.spinner3);
-
         Bundle bundle = getIntent().getExtras();
         gameType = GameType.valueOf(bundle.getString("GameType"));
 
         loadFlashCards();
-        scrambleButtons();
-//        setupInitials();
+        scrambleButton(button0);
+        scrambleButton(button1);
+        scrambleButton(button2);
+        scrambleButton(button3);
 
         timeStart = System.currentTimeMillis();
-        startNewGame();
+        setScore();
+        nextRound();
 
 //        // test data
 //        saveInitials("TOM", 111111, GameType.LULUMODE);
@@ -146,91 +129,27 @@ public class GameActivity extends AppCompatActivity {
             default:
                 flashCard.add("1,1");
         }
-    }
 
-    private void scrambleButtons() {
-        saveOrMenuButton.setRotation(r.nextInt(20) - 10);
-        button0.setRotation(r.nextInt(20) - 10);
-        button1.setRotation(r.nextInt(20) - 10);
-        button2.setRotation(r.nextInt(20) - 10);
-        button3.setRotation(r.nextInt(20) - 10);
 
-        GradientDrawable gradientDrawable;
+        // testing mode
+//        flashCard.clear();
+//        flashCard.add("1,1");
+//        flashCard.add("1,2");
+//        flashCard.add("1,3");
 
-        gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, gradientColorGeneratorLight());
-        gradientDrawable.setCornerRadius(80f);
-        saveOrMenuButton.setBackground(gradientDrawable);
 
-        gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, gradientColorGeneratorLight());
-        gradientDrawable.setCornerRadius(80f);
-        button0.setBackground(gradientDrawable);
-        button1.setBackground(gradientDrawable);
-        button2.setBackground(gradientDrawable);
-        button3.setBackground(gradientDrawable);
-    }
-
-    @NonNull
-    private int[] gradientColorGeneratorLight() {
-        int[] startRaw = new int[]{r.nextInt(128) + 128, r.nextInt(128) + 128, r.nextInt(128) + 128};
-        startRaw[r.nextInt(3)] = 255;
-
-        int[] endRaw = new int[]{r.nextInt(128) + 128, r.nextInt(128) + 128, r.nextInt(128) + 128};
-        endRaw[r.nextInt(3)] = 255;
-
-        String startColor = String.format("%02X", startRaw[0]) + String.format("%02X", startRaw[1]) + String.format("%02X", startRaw[2]);
-        String endColor = String.format("%02X", endRaw[0]) + String.format("%02X", endRaw[1]) + String.format("%02X", endRaw[2]);
-
-        int[] ButtonColors = {Color.parseColor("#" + startColor),Color.parseColor("#" + endColor)};
-
-        return ButtonColors;
-    }
-
-    @NonNull
-    private int[] gradientColorGeneratorDark() {
-        int[] startRaw = new int[]{r.nextInt(128), r.nextInt(128), r.nextInt(128)};
-        startRaw[r.nextInt(3)] = 0;
-
-        int[] endRaw = new int[]{r.nextInt(128), r.nextInt(128), r.nextInt(128)};
-        endRaw[r.nextInt(3)] = 0;
-
-        String startColor = String.format("%02X", startRaw[0]) + String.format("%02X", startRaw[1]) + String.format("%02X", startRaw[2]);
-        String endColor = String.format("%02X", endRaw[0]) + String.format("%02X", endRaw[1]) + String.format("%02X", endRaw[2]);
-
-        int[] ButtonColors = {Color.parseColor("#" + startColor),Color.parseColor("#" + endColor)};
-
-        return ButtonColors;
-    }
-
-    private void startNewGame() {
-        saveOrMenuButton.setVisibility(View.GONE);
-        gameOverMsg.setVisibility(View.GONE);
-        gameOverDetailsMsg.setVisibility(View.GONE);
-        equation.setVisibility(View.VISIBLE);
-        button0.setVisibility(View.VISIBLE);
-        button1.setVisibility(View.VISIBLE);
-        button2.setVisibility(View.VISIBLE);
-        button3.setVisibility(View.VISIBLE);
-        spinner1.setVisibility(View.GONE);
-        spinner2.setVisibility(View.GONE);
-        spinner3.setVisibility(View.GONE);
-
-        currentScore = 0;
-        setScore();
-        nextRound();
     }
 
     private void setScore() {
         switch (gameType) {
-            case ULTIMATECHALLENGE:
-                if(currentScore > highScore){
-                    highScore = currentScore;
-                }
-                getSupportActionBar().setTitle("Score: " + currentScore);
-                break;
             case EASYPEASY:
             case SQUARESBEARS:
             case CENTURY:
                 getSupportActionBar().setTitle("Score: " + currentScore + "      Remaining: " + flashCard.size());
+                break;
+            case ULTIMATECHALLENGE:
+            default:
+                getSupportActionBar().setTitle("Score: " + currentScore);
                 break;
         }
     }
@@ -272,7 +191,10 @@ public class GameActivity extends AppCompatActivity {
         button2.setText(possibleAnswers[2].toString());
         button3.setText(possibleAnswers[3].toString());
 
-        scrambleButtons();
+        scrambleButton(button0);
+        scrambleButton(button1);
+        scrambleButton(button2);
+        scrambleButton(button3);
     }
 
     private void answerCheck(Integer i) {
@@ -284,124 +206,28 @@ public class GameActivity extends AppCompatActivity {
             setScore();
 
             if (flashCard.isEmpty()) { // game over, win!
-                String g = "You Win\n";
-
-                if(gameType==GameType.EASYPEASY) {
-                    g += "Easy Peasy";
-                } else if(gameType==GameType.SQUARESBEARS) {
-                    g += "Squares\n& Bears";
-                } else if(gameType==GameType.CENTURY) {
-                    g += "Century Club";
-                } else {
-                    g += "Big Winner";
-                }
-
-                int elapsedTime = setGameOverDetails(g);
-                regularWin(elapsedTime);
+                callGameOverActivity(true);
             } else {
                 nextRound();
             }
         } else { // wrong answer
-            setGameOverDetails("game over\nfinal score: " + currentScore);
-
-            if (gameType == GameType.ULTIMATECHALLENGE) {
-                ultimateGameOver();
-            } else {
-                regularLoss();
-            }
+            callGameOverActivity(false);
         }
     }
 
-    private int setGameOverDetails(String gameOverMsgIn) {
+    private void callGameOverActivity(boolean isWin) {
+        Intent intent = new Intent(this, GameOverActivity.class);
+        Bundle bundle = new Bundle();
+
         int elapsedTime = (int) (System.currentTimeMillis() - timeStart);
-        String gameOverDetails = String.format("%.2f", (float)elapsedTime / 1000.0f) + " seconds";
-//        gameOverDetails += currentScore > 0 ? String.format("%.3f", (float)elapsedTime / (float)currentScore / 1000.0f) + " average" : "";
-        gameOverDetailsMsg.setText(gameOverDetails);
-        gameOverDetailsMsg.setVisibility(View.VISIBLE);
+        bundle.putString("GameType", gameType.toString());
+        bundle.putInt("ElapsedTime", elapsedTime);
+        bundle.putInt("CurrentScore", currentScore);
+        bundle.putBoolean("IsWin", isWin);
 
-        gameOverMsg.setText(gameOverMsgIn);
-        gameOverMsg.setVisibility(View.VISIBLE);
-        saveOrMenuButton.setVisibility(View.VISIBLE);
-        equation.setVisibility(View.GONE);
-        button0.setVisibility(View.GONE);
-        button1.setVisibility(View.GONE);
-        button2.setVisibility(View.GONE);
-        button3.setVisibility(View.GONE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(500);
-        }
-
-        return elapsedTime;
-    }
-
-    private void regularWin(int elapsedTime) {
-        SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
-        float hiScoreTime = prefs.getFloat("elapsedTime", Float.MAX_VALUE);
-
-        if (elapsedTime < hiScoreTime) {
-            setupInitials();
-            saveOrMenuButton.setOnClickListener(view -> saveInitials(elapsedTime));
-            saveOrMenuButton.setText("save");
-        } else {
-            saveOrMenuButton.setOnClickListener(view -> finish());
-            saveOrMenuButton.setText("menu");
-        }
-
-        playWinSong();
-    }
-
-    private void playWinSong() {
-        MediaPlayer song = MediaPlayer.create(this, R.raw.bagpipevictory28720); // https://pixabay.com/sound-effects/search/victory/
-        song.start();
-    }
-
-    private void regularLoss() {
-        saveOrMenuButton.setOnClickListener(view -> finish());
-        saveOrMenuButton.setText("menu");
-        MediaPlayer song = MediaPlayer.create(this, R.raw.sfxdefeat1);
-        song.start();
-    }
-
-    private void ultimateGameOver() {
-        SharedPreferences prefs = this.getSharedPreferences(gameType.toString(), Context.MODE_PRIVATE);
-        int hiScore = prefs.getInt("score", 0);
-
-        if (currentScore > hiScore) {
-            setupInitials();
-            saveOrMenuButton.setOnClickListener(view -> saveInitials(currentScore));
-            saveOrMenuButton.setText("save");
-            playWinSong();
-        } else {
-            regularLoss();
-        }
-    }
-
-    private void saveInitials(int score) {
-        String initials = spinner1.getSelectedItem().toString() + spinner2.getSelectedItem().toString() + spinner3.getSelectedItem().toString();
-        saveInitials(initials, score, gameType);
-    }
-
-    private void saveInitials(String initials, int score, GameType gt) {
-        SharedPreferences prefs = this.getSharedPreferences(gt.toString(), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("score", score);
-        editor.putString("initials", initials);
-        editor.commit();
+        intent.putExtras(bundle);
+        startActivity(intent);
         finish();
-    }
-
-    private void setupInitials() {
-        spinner1.setVisibility(View.VISIBLE);
-        spinner2.setVisibility(View.VISIBLE);
-        spinner3.setVisibility(View.VISIBLE);
-        String[] items = new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "_"};
-        ArrayAdapter<String> ad = new ArrayAdapter<>(this, R.layout.my_spinner, items);
-        spinner1.setAdapter(ad);
-        spinner2.setAdapter(ad);
-        spinner3.setAdapter(ad);
     }
 
     private Integer answerGenerator(Integer a, Integer b){
