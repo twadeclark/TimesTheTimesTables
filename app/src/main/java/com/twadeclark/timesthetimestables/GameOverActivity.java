@@ -1,13 +1,11 @@
 package com.twadeclark.timesthetimestables;
 
-import static com.twadeclark.timesthetimestables.Utils.gradientColorGeneratorLight;
 import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;

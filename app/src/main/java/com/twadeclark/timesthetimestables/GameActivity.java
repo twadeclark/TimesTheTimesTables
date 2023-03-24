@@ -1,17 +1,13 @@
 package com.twadeclark.timesthetimestables;
 
-import static com.twadeclark.timesthetimestables.Utils.gradientColorGeneratorLight;
 import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
-
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -70,26 +66,6 @@ public class GameActivity extends AppCompatActivity {
         timeStart = System.currentTimeMillis();
         setScore();
         nextRound();
-
-//        // test data
-//        saveInitials("TOM", 111111, GameType.LULUMODE);
-//        saveInitials("DAD", 222222, GameType.EASYPEASY);
-//        saveInitials("POO", 333333, GameType.SQUARESBEARS);
-//        saveInitials("LOL", 444444, GameType.CENTURY);
-//        saveInitials("_X_", 555555, GameType.ULTIMATECHALLENGE);
-
-//        // clear it out
-//        SharedPreferences settings;
-//        settings = this.getSharedPreferences(GameType.LULUMODE.toString(), Context.MODE_PRIVATE);
-//        settings.edit().clear().commit();
-//        settings = this.getSharedPreferences(GameType.EASYPEASY.toString(), Context.MODE_PRIVATE);
-//        settings.edit().clear().commit();
-//        settings = this.getSharedPreferences(GameType.SQUARESBEARS.toString(), Context.MODE_PRIVATE);
-//        settings.edit().clear().commit();
-//        settings = this.getSharedPreferences(GameType.CENTURY.toString(), Context.MODE_PRIVATE);
-//        settings.edit().clear().commit();
-//        settings = this.getSharedPreferences(GameType.ULTIMATECHALLENGE.toString(), Context.MODE_PRIVATE);
-//        settings.edit().clear().commit();
     }
 
     private void loadFlashCards() {
