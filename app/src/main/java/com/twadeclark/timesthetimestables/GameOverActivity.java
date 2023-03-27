@@ -96,6 +96,7 @@ public class GameOverActivity extends AppCompatActivity {
             }
 
         } else { // regular game loss
+            playLossSong();
             gameOverMsg.setText("Game Over");
         }
 
