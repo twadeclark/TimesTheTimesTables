@@ -3,15 +3,10 @@ package com.twadeclark.timesthetimestables;
 import static com.twadeclark.timesthetimestables.Utils.scrambleButton;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
